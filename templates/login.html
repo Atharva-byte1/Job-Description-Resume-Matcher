@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Login</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+    <style>
+        body {
+            background: linear-gradient(120deg, #ace0f9 0%, #8ecdf6 100%);
+            font-family: 'Nunito', sans-serif;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 400px;
+            margin-top: 70px;
+        }
+        .card {
+            border-radius: 15px;
+            box-shadow: 0 8px 22px rgba(0,0,0,0.13);
+            background-color: #fff;
+            border: none;
+            transition: box-shadow .3s;
+            padding: 32px 26px;
+        }
+        .card-header {
+            background: linear-gradient(90deg,#007bff,#00c6ff);
+            color: white;
+            border-radius: 12px 12px 0 0;
+            padding: 18px 0;
+            text-align: center;
+            font-size: 2rem;
+            font-weight: 700;
+            box-shadow: 0 2px 14px rgba(0,0,0,0.09);
+            letter-spacing: 1px;
+        }
+        .form-group label {
+            font-weight: 600;
+            color: #3778c2;
+            letter-spacing: .5px;
+        }
+        .form-control {
+            border-radius: 8px;
+            transition: border-color .3s;
+        }
+        .form-control:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 0 0.18rem rgba(0,123,255,0.18);
+        }
+        .btn-primary {
+            background: linear-gradient(90deg,#007bff,#00c6ff);
+            border-radius: 8px;
+            border: none;
+            font-size: 1.15rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            padding: 10px 36px;
+            box-shadow: 0 4px 12px rgba(0,123,255,0.13);
+            transition: transform .2s;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px) scale(1.03);
+            background: linear-gradient(90deg,#0156d3,#01b8e1);
+        }
+        .text-center a {
+            color: #0066b2;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .text-center a:hover {
+            text-decoration: underline;
+        }
+        .alert {
+            border-radius: 8px;
+            padding: 18px;
+            font-size: 1rem;
+            box-shadow: 0 2px 10px rgba(66,133,244,.09);
+            margin-top: 24px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <div class="card-header">
+                <i class="fas fa-user-lock"></i> Login
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    <div class="form-group">
+                        <label for="username"><i class="fas fa-user"></i> Username:</label>
+                        <input type="text" name="username" id="username" required class="form-control" autocomplete="username">
+                    </div>
+                    <div class="form-group">
+                        <label for="password"><i class="fas fa-lock"></i> Password:</label>
+                        <input type="password" name="password" id="password" required class="form-control" autocomplete="current-password">
+                    </div>
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-primary w-75"><i class="fas fa-sign-in-alt"></i> Sign In</button>
+                    </div>
+                </form>
+                <div class="text-center mt-3">
+                    <a href="/register">Don't have an account? <span style="color:#007bff;">Register</span></a>
+                </div>
+                {% if message %}
+                <div class="alert alert-danger text-center">{{ message }}</div>
+                {% endif %}
+            </div>
+        </div>
+    </div

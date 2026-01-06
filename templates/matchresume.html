@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume Matcher</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+    <style>
+        body {
+            background: linear-gradient(to right, #d9afd9 0%, #97d9e1 100%);
+            font-family: 'Nunito', sans-serif;
+            min-height: 100vh;
+        }
+        .container {
+            margin-top: 60px;
+            max-width: 620px;
+        }
+        .card {
+            padding: 25px 20px 20px 20px;
+            border-radius: 15px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.18);
+            background-color: #fff;
+            border: none;
+            transition: box-shadow .3s;
+        }
+        .card:hover {
+            box-shadow: 0 12px 32px rgba(0,0,0,0.23);
+        }
+        .card-header {
+            background: linear-gradient(90deg,#007bff,#00c6ff);
+            color: white;
+            border-radius: 15px 15px 0 0;
+            padding: 16px 0;
+            text-align: center;
+            letter-spacing: 1px;
+            font-size: 2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.09);
+        }
+        .form-group label {
+            font-weight: 600;
+            color: #454545;
+            letter-spacing: .5px;
+        }
+        .form-control, .custom-file-input {
+            border-radius: 8px;
+            transition: border-color .3s;
+        }
+        .form-control:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 0 0.18rem rgba(0, 123, 255, 0.18);
+        }
+        .btn-primary {
+            background: linear-gradient(90deg,#007bff,#00c6ff);
+            border-radius: 7px;
+            border: none;
+            font-size: 1.1rem;
+            font-weight: bold;
+            letter-spacing: 1px;
+            padding: 10px 32px;
+            box-shadow: 0 4px 12px rgba(0,123,255,0.13);
+            transition: transform .2s;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px) scale(1.04);
+            background: linear-gradient(90deg,#0156d3,#01b8e1);
+        }
+        .upload-area {
+            background: #e3f2fd;
+            border-radius: 10px;
+            padding: 15px 18px;
+            text-align: center;
+            margin-bottom: 1rem;
+            border: 2px dashed #90caf9;
+        }
+        .upload-area i {
+            font-size: 2.3rem;
+            color: #007bff;
+            margin-bottom: 10px;
+        }
+        .alert-info {
+            background: linear-gradient(90deg,#e2eafc,#a1c4fd);
+            border: none;
+            color: #23272b;
+            border-radius: 8px;
+            padding: 20px;
+            font-size: 1rem;
+            box-shadow: 0 2px 6px rgba(130,169,255,.08);
+        }
+        .result-list {
+            padding-left: 0;
+            list-style: none;
+            margin-top: 14px;
+        }
+        .result-list li {
+            background-color: #f4f9fb;
+            margin: 7px 0;
+            padding: 13px 17px;
+            border-radius: 7px;
+            font-size: 1.05rem;
+            box-shadow: 0 1px 3px rgba(66,133,244,.11);
+            display: flex;
+            align-items: center;
+        }
+        .result-list li i {
+            font-size: 1.2rem;
+            margin-right: 10px;
+            color: #007bff;
+        }
+        @media (max-width: 700px) {
+            .container { margin-top: 20px; }
+            .card { padding: 13px; }
+        }
+        /* Logout button */
+        .logout-btn {
+            text-align: right;
+            margin-bottom: 10px;
+        }
+        .logout-btn a {
+            color: #fff;
+            background: #f44336;
+            padding: 6px 12px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .logout-btn a:hover {
+            background: #d32f2f;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logout-btn">
+            <a href="/logout">Logout</a>
+        </div>
+        <div class="card">
+            <div class="card-header">
+                <i class="fas fa-search"></i> Job Description and Resume Matcher
+            </div>
+            <div class="card-body">
+                <form method="POST" action="/matcher" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label for="job_description"><i class="fas fa-clipboard-list"></i> Job Description:</label>
+                        <textarea class="form-control" id="job_description" name="job_description" rows="5" required
+                        placeholder="Paste or write the job description here..."></textarea>
+                    </div>
+                    <div class="form-group upload-area">
+                        <i class="fas fa-file-upload"></i><br>
+                        <label for="resumes">Upload Resumes:</label>
+                        <p>Upload more than 5 resumes in PDF, DOCX, or TXT format.</p>
+                        <input type="file" class="form-control" id="resumes" name="resumes" multiple required accept=".pdf, .docx, .txt">
+                    </div>
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-primary"><i class="fas fa-magic"></i> Match Resumes</button>
+                    </div>
+                </form>
+                {% if message %}
+                    <div class="alert alert-info mt-4">
+                        <strong>{{ message }}</strong>
+                        <ul class="result-list">
+                            {% for index in range(top_resumes|length) %}
+                                <li><i class="fas fa-user-check"></i>{{ top_resumes[index] }} <span style="margin-left:8px; color: #016afb;">(Similarity: {{ similarity_scores[index] }})</span></li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
